@@ -162,6 +162,62 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .qr svg{width:100%;height:100%;display:block}
 .roomnum{font-size:1.2rem;margin:6px 0}
 .roomnum b{font-size:1.8rem;letter-spacing:.12em;color:var(--amber)}
+
+/* ---- 設計版總界面 ---- */
+.sky{position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at top,#3b3f9e 0%,#1d1f5c 55%,#12133a 100%)}
+.sky i{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+.t-head{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:rgba(255,255,255,.08);border-radius:24px;padding:16px 22px;margin-bottom:16px}
+.cloud{position:absolute;width:150px;opacity:.85;pointer-events:none}
+.cloud.c1{right:260px;top:-10px;animation:drift 18s ease-in-out infinite alternate}
+.cloud.c2{right:60px;bottom:-30px;width:110px;animation:drift 22s ease-in-out infinite alternate-reverse}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(16px)}}
+.t-brand{display:flex;align-items:center;gap:14px;position:relative}
+.mascot-svg{width:72px;height:72px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.t-title{font-size:2rem;margin:0;color:#fff;letter-spacing:.04em}
+.t-actions{position:relative}
+.t-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+@media (max-width:900px){.t-grid{grid-template-columns:1fr}}
+.jar-panel{background:rgba(255,255,255,.08);border-radius:24px;padding:18px;text-align:center}
+.jar-title{font-size:1.4rem;color:#fff;margin:0}
+.jar-sub{color:#cfd3ff;margin:4px 0 10px;font-size:.95rem}
+.jar2{position:relative;width:200px;height:250px;margin:0 auto}
+.jar-lid{position:absolute;left:30px;right:30px;top:0;height:22px;border-radius:10px;background:linear-gradient(#e9f4ff,#9fc3ea);border:3px solid #6f8fb8;z-index:2}
+.jar-body{position:absolute;left:0;right:0;top:18px;bottom:0;border-radius:22px 22px 60px 60px;border:5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.1);overflow:hidden}
+.jar-water{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#7fd3ff,#2b8fe0);transition:height 1.2s cubic-bezier(.3,.7,.3,1);opacity:.85}
+.jar-water::before{content:"";position:absolute;left:-10%;right:-10%;top:-10px;height:22px;background:radial-gradient(ellipse at 50% 100%,#bfeaff 40%,transparent 42%) 0 0/28px 22px repeat-x;animation:wave 2.2s linear infinite}
+@keyframes wave{to{background-position:28px 0}}
+.jar-shine{position:absolute;left:14px;top:30px;bottom:30px;width:10px;border-radius:8px;background:rgba(255,255,255,.45)}
+.jar-star{position:absolute;width:26px;height:26px;animation:float 3s ease-in-out infinite}
+.jar-star svg{width:100%;height:100%;display:block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.jar-count{margin-top:10px;font-size:1.35rem;font-weight:800;color:#ffd23f}
+.joinbox2{display:flex;gap:12px;align-items:center;margin-top:14px;text-align:left;flex-wrap:wrap;justify-content:center}
+.joinbox2 .qr{width:150px;height:150px}
+.small-url{word-break:break-all;font-size:.75rem}
+.empty-state{grid-column:1/-1;text-align:center;color:#fff;background:rgba(255,255,255,.07);border-radius:24px;padding:28px}
+.empty-state .mascot-svg{margin:0 auto 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.pcard{display:block;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border-radius:24px;padding:16px 14px;border:3px solid rgba(255,255,255,.12);box-shadow:0 6px 0 rgba(0,0,0,.18);transition:transform .15s}
+.pcard:hover{transform:translateY(-3px) rotate(-.5deg)}
+.pbadge{width:72px;height:72px;margin:0 auto 6px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:2.4rem;box-shadow:0 4px 0 #d9d2ff}
+.pname{font-size:1.2rem;font-weight:800;color:#fff}
+.ptag{display:inline-block;margin:4px 0 8px;padding:2px 10px;border-radius:99px;background:#ff8fb1;color:#fff;font-size:.8rem;font-weight:700}
+.pslots{display:grid;grid-template-columns:repeat(15,1fr);gap:2px;margin:8px 0}
+.slot{display:grid;place-items:center;height:18px;border-radius:5px;background:rgba(255,255,255,.14);font-size:.7rem;color:#fff;font-weight:800}
+.slot.ok{background:#ffd23f;color:#5a3d00}
+.slot.no{background:#ff7a7a;color:#fff}
+.slot.cur{outline:2px dashed #ffd23f}
+.pfoot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;font-size:.8rem;color:#e6e8ff;font-weight:700}
+.pstatus{padding:0 6px;border-radius:99px;background:rgba(255,255,255,.18)}
+.pstatus.done{background:#3ddc97;color:#06331f}
+.flyer{position:fixed;width:44px;height:44px;margin:-22px 0 0 -22px;pointer-events:none;z-index:50}
+.flyer svg{width:100%;height:100%;filter:drop-shadow(0 0 8px #ffd23f)}
+.detail{background:#fff;color:#23244f;border-radius:24px;padding:18px;margin-top:18px}
+.detail .muted{color:#5a5e8a}
+.detail .btn.ghost{color:#23244f;border-color:#23244f}
+.sm-url{word-break:break-all}
 </style>
 </head>
 <body>
@@ -399,37 +455,72 @@ function learnPage(){
     <p class="note">點 🔊 聽一聽，再跟著唸。</p></div>`;
 }
 
-const cardHTML=p=>{
+/* ===== 6. 老師總界面（設計版：星空教室、星星罐、飛入動畫） ===== */
+function starPts(cx,cy,R,r){const p=[];for(let i=0;i<10;i++){const rad=i%2?r:R;const a=-Math.PI/2+i*Math.PI/5;p.push((cx+rad*Math.cos(a)).toFixed(1)+','+(cy+rad*Math.sin(a)).toFixed(1));}return p.join(' ');}
+const STAR_SVG=`<svg viewBox="0 0 120 120" aria-hidden="true"><polygon points="${starPts(60,62,56,24)}" fill="#ffd23f" stroke="#e8a300" stroke-width="6" stroke-linejoin="round"/><circle cx="60" cy="58" r="0" /></svg>`;
+const MASCOT_SVG=`<svg class="mascot-svg" viewBox="0 0 140 140" aria-hidden="true">
+  <polygon points="${starPts(70,74,62,28)}" fill="#ffd23f" stroke="#e8a300" stroke-width="5" stroke-linejoin="round"/>
+  <ellipse cx="50" cy="72" rx="5.5" ry="7" fill="#23244f"/><ellipse cx="90" cy="72" rx="5.5" ry="7" fill="#23244f"/>
+  <circle cx="46" cy="86" r="6" fill="#ff8a80" opacity=".7"/><circle cx="94" cy="86" r="6" fill="#ff8a80" opacity=".7"/>
+  <path d="M58 84 Q70 96 82 84" stroke="#23244f" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>`;
+const CLOUD_SVG=`<svg class="cloud" viewBox="0 0 200 90" aria-hidden="true"><path d="M30 80 Q5 80 10 55 Q15 35 40 40 Q45 15 75 20 Q95 0 120 22 Q150 15 160 40 Q190 40 188 65 Q186 80 160 80Z" fill="#ffffff"/></svg>`;
+const SLOT_ICON={ok:'★',no:'✕',cur:'',empty:''};
+
+function cardHTML(p){
   const n=p.n||0,res=p.results||[],okN=res.filter(r=>r.ok).length;
-  const st=p.status==='done'?'已完成':n?'進行中':'剛開始';
+  const done=p.status==='done';
+  const slots=Array.from({length:15},(_,i)=>{
+    const r=res[i];
+    if(r)return `<span class="slot ${r.ok?'ok':'no'}">${r.ok?'★':'✕'}</span>`;
+    return `<span class="slot ${i===n&&!done?'cur':''}"></span>`;
+  }).join('');
   return `<button class="pcard" data-act="sel" data-id="${esc(p.id)}">
-    <div class="av big">${esc(p.avatar||'🙂')}</div>
+    <div class="pbadge">${esc(p.avatar||'🙂')}</div>
     <div class="pname">${esc(p.name)}</div>
-    <span class="tag">${esc(BANDS[p.band]||'')}</span>
-    <div class="bar"><i style="width:${Math.min(n,15)/15*100}%"></i></div>
-    <div class="pstat">第 ${Math.min(n,15)}/15 題　⭐ ${p.stars||0}　答對 ${okN}</div>
-    <span class="chip2 ${p.status==='done'?'ok':''}">${st}</span></button>`;
-};
+    <span class="ptag">${esc(BANDS[p.band]||'')}</span>
+    <div class="pslots">${slots}</div>
+    <div class="pfoot"><span>⭐ ${p.stars||0}</span><span>答對 ${okN}/15</span><span class="pstatus ${done?'done':''}">${done?'已完成':n?'進行中':'剛開始'}</span></div>
+  </button>`;
+}
 function detailHTML(p){
   const res=(p.results||[]);
   const rows=res.map(r=>`<tr class="${r.ok?'okrow':'nrow'}"><td>${r.n}</td><td>${esc(r.label)}</td><td>${r.ok?'✔':'✘'}</td><td>${esc(r.given)}</td><td>${esc(r.correct)}</td></tr>`).join('');
   return `<div class="detail">
     <div class="row" style="justify-content:space-between;align-items:center"><h2 class="sm">${esc(p.avatar)} ${esc(p.name)} 的答題紀錄</h2><button class="btn ghost" data-act="close">關閉</button></div>
-    <p class="muted">${esc(BANDS[p.band]||'')}　・　已答 ${res.length} 題　・　答對 ${res.filter(r=>r.ok).length}　・　⭐ ${p.stars||0}</p>
+    <p class="muted">${esc(BANDS[p.band]||'')}　・　已答 ${res.length} 題　・　答對 ${res.filter(r=>r.ok).length} / 15　・　⭐ ${p.stars||0}</p>
     <div class="tablewrap"><table class="sheet"><thead><tr><th>題</th><th>類型</th><th>對錯</th><th>作答</th><th>正確答案</th></tr></thead>
       <tbody>${rows||'<tr><td colspan="5">尚未作答</td></tr>'}</tbody></table></div>
     <div class="row" style="margin-top:14px"><button class="btn blue" data-act="csvone" data-id="${esc(p.id)}">下載此人成績單</button>
       <button class="btn red" data-act="delp" data-id="${esc(p.id)}">${T.arm===p.id?'再按一次，確定移除':'移除此人'}</button></div></div>`;
 }
+
+/* ===== 6b. 成績單（含分數） ===== */
 const csvEsc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
-function csvText(list){
-  const rows=[['姓名','年齡組','狀態','目前星星','題號','題型','作答','正確答案','對錯']];
+const csvLine=r=>r.map(csvEsc).join(',');
+function scoreOf(p){const res=p.results||[];const ok=res.filter(r=>r.ok).length;return {ok,answered:res.length,pct:Math.round(ok/15*100)};}
+function csvAll(list){
+  const head=['姓名','年齡組','狀態','答對題數','已答題數','分數（/15）','正確率','星星'];
+  for(let i=1;i<=15;i++)head.push('第'+i+'題');
+  const rows=[head];
   list.forEach(p=>{
-    const base=[p.name,BANDS[p.band]||'',p.status==='done'?'已完成':'進行中',p.stars||0];
-    if(!(p.results||[]).length)rows.push([...base,'','','','','尚未作答']);
-    (p.results||[]).forEach(r=>rows.push([...base,r.n,r.label,r.given,r.correct,r.ok?'對':'錯']));
+    const s=scoreOf(p);
+    const row=[p.name,BANDS[p.band]||'',p.status==='done'?'已完成':'進行中',s.ok,s.answered,`${s.ok} / 15`,s.pct+'%',p.stars||0];
+    for(let i=0;i<15;i++){const r=(p.results||[])[i];row.push(r?`${r.ok?'✔':'✘'} ${r.label}`:'');}
+    rows.push(row);
   });
-  return '﻿'+rows.map(r=>r.map(csvEsc).join(',')).join('\r\n');
+  return '﻿'+rows.map(csvLine).join('\r\n');
+}
+function csvOne(p){
+  const s=scoreOf(p);
+  const lines=[
+    csvLine(['姓名','年齡組','狀態','分數（/15）','正確率','星星']),
+    csvLine([p.name,BANDS[p.band]||'',p.status==='done'?'已完成':'進行中',`${s.ok} / 15`,s.pct+'%',p.stars||0]),
+    '',
+    csvLine(['題號','類型','對錯','作答','正確答案'])
+  ];
+  (p.results||[]).forEach(r=>lines.push(csvLine([r.n,r.label,r.ok?'對':'錯',r.given,r.correct])));
+  return '﻿'+lines.join('\r\n');
 }
 async function saveFile(name,text){
   try{
@@ -443,175 +534,66 @@ async function saveFile(name,text){
   document.body.appendChild(m);
 }
 
-/* ===== 4. 設定、狀態與資料庫（Firebase，小朋友免登入） ===== */
-/* 老師一次性設定：把 Firebase 專案的設定貼到下面（見設定說明） */
-const FIREBASE_CONFIG={apiKey:'AIzaSyBJ89GeTX7OYfnGnOG55O4qirGayuumn78',authDomain:'lunyu-quiz.firebaseapp.com',projectId:'lunyu-quiz',storageBucket:'lunyu-quiz.firebasestorage.app',messagingSenderId:'132061025853',appId:'1:132061025853:web:f3e96d837e79b189fb3c54'};
-const CONFIGURED=!String(FIREBASE_CONFIG.projectId).startsWith('PASTE_HERE');
-
-let ME=null;
-try{ME=JSON.parse(localStorage.getItem('lunyu-cls-me')||'null');}catch(e){ME=null;}
-const saveMe=()=>{try{if(ME)localStorage.setItem('lunyu-cls-me',JSON.stringify(ME));else localStorage.removeItem('lunyu-cls-me');}catch(e){}};
-let TEACHER=location.hash==='#teacher';
-let VIEW='';
-let FS=null,AUTH=null,CONNECTED=false;
-let ROOM={ended:false},PLAYERS=[],SYNC='';
-let unsubs=[];
-let TROOM=(()=>{try{return localStorage.getItem('lunyu-cls-troom')||'';}catch(e){return '';}})();
-const URLROOM=(new URLSearchParams(location.search).get('r')||'').replace(/\D/g,'').slice(0,6);
-let CH={code:URLROOM,name:'',avatar:'',band:''};
-let S={locked:false,peek:false,learnCh:4};
-let T={sel:null,arm:null};
-const SYNCTXT=()=>`<span id="sync">${esc(SYNC)}</span>`;
-function setSync(t){SYNC=t;const el=document.getElementById('sync');if(el)el.textContent=t;}
-const newCode=()=>String(Math.floor(100000+Math.random()*900000));
-const roomRef=c=>FS.collection('rooms').doc(c);
-const playersCol=c=>roomRef(c).collection('players');
-
-async function connect(){
-  if(CONNECTED)return true;
-  if(!CONFIGURED){setSync('尚未設定資料庫，請老師先完成設定');return false;}
-  if(typeof firebase==='undefined'){setSync('無法載入連線程式，請檢查網絡後重新整理');return false;}
-  try{
-    if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
-    AUTH=firebase.auth();FS=firebase.firestore();
-    await AUTH.signInAnonymously();
-    CONNECTED=true;setSync('已連線');return true;
-  }catch(e){setSync('連線失敗：'+(e.code||e.message||'未知'));return false;}
+/* ===== 6c. 星空背景與星星罐 ===== */
+function buildSky(){
+  if(document.querySelector('.sky'))return;
+  const sky=document.createElement('div');sky.className='sky';sky.setAttribute('aria-hidden','true');
+  for(let i=0;i<70;i++){const d=document.createElement('i');d.style.left=((i*73)%100)+'%';d.style.top=((i*41)%100)+'%';d.style.animationDelay=((i*0.37)%3)+'s';d.style.width=d.style.height=(i%5===0?4:2)+'px';sky.appendChild(d);}
+  document.body.prepend(sky);
 }
-function watch(code){
-  unsubs.forEach(f=>{try{f();}catch(e){}});unsubs=[];
-  PLAYERS=[];ROOM={ended:false};
-  if(!FS||!code)return;
-  unsubs.push(roomRef(code).onSnapshot(s=>{
-    ROOM=(s.exists&&s.data())||{ended:false};
-    if(TEACHER)renderTeacher();
-    else if(VIEW==='reg')reg();
-  },err=>setSync('同步出錯：'+(err.code||'未知'))));
-  unsubs.push(playersCol(code).onSnapshot(snap=>{
-    PLAYERS=snap.docs.map(d=>({id:d.id,...d.data()}));
-    if(TEACHER)renderTeacher();
-  },err=>setSync('同步出錯：'+(err.code||'未知'))));
-}
-
-const playerBody=()=>({name:ME.name,avatar:ME.avatar,band:ME.band,status:ME.done?'done':'playing',stars:ME.stars,n:ME.results.length,results:ME.results,updated:Date.now()});
-let saving=false,dirty=false;
-function persist(){
-  saveMe();
-  if(!FS||!ME)return;
-  dirty=true;
-  if(!saving)flush();
-}
-async function flush(){
-  saving=true;
-  while(dirty&&FS&&ME){
-    dirty=false;
-    const room=ME.room,pid=ME.pid,body=playerBody();
-    try{await playersCol(room).doc(pid).set(body);setSync('已同步');}
-    catch(e){setSync('未能同步，稍後自動重試');dirty=true;await sleep(3000);}
+function jarStarsHTML(total,pct){
+  const n=Math.min(total,90);let h='';
+  for(let i=0;i<n;i++){
+    const x=6+((i*47)%84), y=2+((i*29)%96)/100*Math.max(pct,10)*0.92;
+    h+=`<span class="jar-star" style="left:${x}%;bottom:${y}%;animation-delay:${(i%7)*0.4}s">${STAR_SVG}</span>`;
   }
-  saving=false;
+  return h;
 }
-
-/* ===== 5a. 小朋友：房間號碼、註冊、開始 ===== */
-function reg(){
-  VIEW='reg';
-  const nm=CH.name.trim();
-  const codeOk=/^\d{6}$/.test(CH.code);
-  const ready=!!(codeOk&&nm&&CH.avatar&&CH.band);
-  app.innerHTML=`<div class="wrap">
-    <div class="hero"><div><h1>論語小測驗</h1><p>顏淵篇 第四至第六章　・　掃 QR 碼或輸入房間號碼即可開始</p></div>
-      <div class="blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
-    <div class="panel"><h2>① 房間號碼（6 位數字，掃 QR 碼會自動填入）</h2>
-      <input id="cd" class="field" inputmode="numeric" maxlength="6" value="${esc(CH.code)}" placeholder="例如：123456" autocomplete="off"></div>
-    <div class="panel"><h2>② 你叫什麼名字？（最多 6 字）</h2>
-      <input id="nm" class="field" maxlength="6" value="${esc(CH.name)}" placeholder="例如：小明" autocomplete="off"></div>
-    <div class="panel"><h2>③ 選一個頭像</h2><div class="avatars">${AV.map(a=>`<button class="av ${CH.avatar===a?'on':''}" data-act="av" data-v="${a}" ${nm?'':'disabled'} aria-pressed="${CH.avatar===a}">${a}</button>`).join('')}</div></div>
-    <div class="panel"><h2>④ 你幾歲？</h2><div class="row">
-      <button class="band ${CH.band==='young'?'on':''}" data-act="band" data-v="young" ${CH.avatar?'':'disabled'} aria-pressed="${CH.band==='young'}"><b>3–4 歲</b><span>讀一讀、找一找、描一描</span></button>
-      <button class="band ${CH.band==='older'?'on':''}" data-act="band" data-v="older" ${CH.avatar?'':'disabled'} aria-pressed="${CH.band==='older'}"><b>5–7 歲</b><span>背一背、寫一寫、接句子</span></button></div></div>
-    <div class="cta"><button class="btn primary" data-act="go" id="go" ${ready?'':'disabled'}>開始測驗</button></div>
-    <p class="note">測驗共 15 題。答錯會直接看到正確答案，不扣分，可以隨時開始。</p>
-    <div class="row" style="justify-content:center;margin-top:10px">
-      <button class="linkbtn" data-act="learn">先學一學</button>
-      <button class="linkbtn" data-act="setting" data-k="py">拼音：${SET.py?'開':'關'}</button>
-      <button class="linkbtn" data-act="setting" data-k="auto">自動朗讀：${SET.auto?'開':'關'}</button>
-      <button class="linkbtn" data-act="setting" data-k="snd">音效：${SET.snd?'開':'關'}</button></div>
-    <p class="note" style="text-align:center"><button class="linkbtn" data-act="teacher">老師入口</button></p>
-    <div class="sync2">${SYNCTXT()}</div></div>`;
-}
-function syncReg(){
-  const nm=CH.name.trim();
-  document.querySelectorAll('[data-act="av"]').forEach(b=>b.disabled=!nm);
-  document.querySelectorAll('[data-act="band"]').forEach(b=>b.disabled=!CH.avatar);
-  const go=document.getElementById('go');
-  if(go)go.disabled=!(/^\d{6}$/.test(CH.code)&&nm&&CH.avatar&&CH.band);
-}
-async function startQuiz(){
-  const code=CH.code;
-  if(!(await connect()))return;
-  const r=await roomRef(code).get();
-  if(!r.exists){setSync('找不到房間號碼 '+code+'，請再確認');return;}
-  if((r.data()||{}).ended){setSync('這個房間已經結束，請問老師');return;}
-  ME={room:code,pid:rid(),name:CH.name.trim().slice(0,6),avatar:CH.avatar,band:CH.band,qs:makeQuiz(CH.band),results:[],stars:0,done:false,started:Date.now()};
-  watch(code);saveMe();persist();question();
-}
-function renderChild(){
-  if(ME&&!ME.done&&ME.results.length>=15){ME.done=true;ME.finished=Date.now();persist();}
-  if(ME&&ME.done)return scorecard();
-  if(ME)return question();
-  return reg();
-}
-
-/* ===== 5b. 老師：房間、總界面 ===== */
-async function newRoom(){
-  if(!(await connect()))return;
-  const code=newCode();
-  await roomRef(code).set({ended:false,created:Date.now()});
-  TROOM=code;try{localStorage.setItem('lunyu-cls-troom',code);}catch(e){}
-  T.sel=null;T.arm=null;
-  watch(code);renderTeacher();
-}
-async function initTeacher(){
-  renderTeacher();
-  if(!(await connect()))return;
-  if(/^\d{6}$/.test(TROOM)){
-    const r=await roomRef(TROOM).get();
-    if(r.exists){watch(TROOM);renderTeacher();return;}
-  }
-  await newRoom();
-}
-function joinURL(){return location.href.split('#')[0].split('?')[0]+'?r='+TROOM;}
-function renderTeacher(){
-  VIEW='teacher';
-  const list=PLAYERS.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'zh-Hant'));
-  const total=list.reduce((s,p)=>s+(p.stars||0),0);
-  const cap=Math.max(15,list.length*15);
+function jarHTML(total,cap){
   const pct=Math.min(100,total/cap*100);
-  const sel=list.find(p=>p.id===T.sel);
-  const ready=CONFIGURED&&/^\d{6}$/.test(TROOM);
-  app.innerHTML=`<div class="wrap wide">
-    <div class="thead"><div><h1 class="sm">論語小測驗・班級總界面</h1>
-      <p class="muted">測驗狀態：<b>${ROOM.ended?'已結束':'進行中'}</b>　・　${SYNCTXT()}</p></div>
-      <div class="row">
-        <button class="btn ${ROOM.ended?'good':'red'}" data-act="endroom" ${ready?'':'disabled'}>${ROOM.ended?'重新開放':'結束測驗'}</button>
-        <button class="btn ghost" data-act="csvall" ${ready?'':'disabled'}>下載全班成績</button>
-        <button class="btn ghost" data-act="newroom" ${ready?'':'disabled'}>${T.arm==='newroom'?'再按一次，確定開新房間':'開新房間'}</button>
-        <button class="btn ghost" data-act="child">小朋友頁面</button></div></div>
-    <div class="joinbox">
-      <div id="qr" class="qr" aria-label="掃碼加入的 QR 碼"></div>
-      <div><h2 class="sm">掃碼或輸入房間號碼加入</h2>
-        <p class="roomnum">房間號碼　<b>${ready?esc(TROOM):'—'}</b></p>
-        <p class="muted" style="word-break:break-all">${ready?esc(joinURL()):'尚未設定資料庫，請見設定說明'}</p></div></div>
-    <div class="jarpanel"><div class="jar" aria-hidden="true"><div class="water" style="height:${pct}%"></div></div>
-      <div><h2 class="sm">班級星星罐</h2><p class="muted">已集 <b>${total}</b> ⭐　／　目標 ${cap} ⭐　（全班 ${list.length} 位，每人 15 題）</p></div></div>
-    <div class="cards">${list.map(cardHTML).join('')||'<p class="muted">還沒有小朋友加入。請小朋友掃 QR 碼，或輸入上面的房間號碼。</p>'}</div>
-    ${sel?detailHTML(sel):''}
-    </div>`;
-  if(ready&&window.qrcode){
-    try{const qr=qrcode(0,'M');qr.addData(joinURL());qr.make();document.getElementById('qr').innerHTML=qr.createSvgTag({cellSize:5,margin:2});}catch(e){}
-  }
+  return `<div class="jar2" id="jar" aria-label="班級星星罐">
+    <div class="jar-lid"></div>
+    <div class="jar-body">
+      <div class="jar-water" style="height:${pct}%"></div>
+      <div class="jar-shine"></div>
+      ${jarStarsHTML(total,pct)}
+    </div>
+    <div class="jar-count">${total} ⭐ / ${cap}</div>
+  </div>`;
+}
+let PREV=null;
+function flyStar(fromEl,toEl,delay){
+  const a=fromEl.getBoundingClientRect(),b=toEl.getBoundingClientRect();
+  const sx=a.left+a.width/2,sy=a.top+a.height/2,tx=b.left+b.width/2,ty=b.top+b.height/2;
+  const el=document.createElement('div');el.className='flyer';el.innerHTML=STAR_SVG;
+  el.style.left=sx+'px';el.style.top=sy+'px';document.body.appendChild(el);
+  if(reduce){setTimeout(()=>el.remove(),200);return;}
+  const dx=tx-sx,dy=ty-sy;
+  el.animate([
+    {transform:'translate(-50%,-50%) scale(.5) rotate(0deg)',opacity:1},
+    {transform:`translate(calc(-50% + ${dx*.35}px), calc(-50% + ${dy*.35-120}px)) scale(1.4) rotate(200deg)`,opacity:1,offset:.45},
+    {transform:`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(.45) rotate(420deg)`,opacity:.3}
+  ],{duration:1100,delay,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'}).onfinish=()=>{
+    el.remove();
+    const jar=document.getElementById('jar');
+    if(jar)jar.animate([{transform:'scale(1)'},{transform:'scale(1.05) rotate(-1deg)'},{transform:'scale(1)'}],{duration:350});
+  };
+}
+function animateGains(list){
+  if(PREV===null){PREV={};list.forEach(p=>PREV[p.id]=p.stars||0);return;}
+  let k=0;
+  list.forEach(p=>{
+    const prev=PREV[p.id]??null,cur=p.stars||0;
+    if(prev!==null&&cur>prev){
+      const card=document.querySelector(`[data-act="sel"][data-id="${CSS.escape(p.id)}"]`);
+      const jar=document.getElementById('jar');
+      if(card&&jar){for(let i=0;i<Math.min(cur-prev,5);i++){flyStar(card,jar,k*120+i*140);}k++;}
+    }
+    PREV[p.id]=cur;
+  });
 }
 
+/* ===== 6d. 老師總界面 ===== */
 /* ===== 7. 事件 ===== */
 app.addEventListener('click',async e=>{
   const el=e.target.closest('[data-act]');if(!el)return;
@@ -647,8 +629,8 @@ app.addEventListener('click',async e=>{
     if(T.arm!=='newroom'){T.arm='newroom';renderTeacher();return;}
     T.arm=null;await newRoom();
   }
-  else if(a==='csvall'){saveFile('論語小測驗-全班成績.csv',csvText(PLAYERS));}
-  else if(a==='csvone'){const p=PLAYERS.find(x=>x.id===d.id);if(p)saveFile(`論語小測驗-${p.name}-成績單.csv`,csvText([p]));}
+  else if(a==='csvall'){saveFile('論語小測驗-全班成績.csv',csvAll(PLAYERS));}
+  else if(a==='csvone'){const p=PLAYERS.find(x=>x.id===d.id);if(p)saveFile(`論語小測驗-${p.name}-成績單.csv`,csvOne(p));}
   else if(a==='delp'){
     if(T.arm!==d.id){T.arm=d.id;renderTeacher();return;}
     try{await playersCol(TROOM).doc(d.id).delete();}catch(err){setSync('未能移除，請再試');}
