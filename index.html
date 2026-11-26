@@ -172,6 +172,9 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .shoot{position:absolute;width:160px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#fff,#ffd23f);animation:shoot 1.6s linear forwards;opacity:0}
 @keyframes shoot{0%{transform:translate(0,0) rotate(25deg);opacity:0}10%{opacity:1}100%{transform:translate(420px,240px) rotate(25deg);opacity:0}}
 .sky i{box-shadow:0 0 6px rgba(255,255,255,.8)}
+.skycloud{position:absolute;left:0;width:170px;opacity:.22;animation:crossSky linear infinite;pointer-events:none}
+.skycloud svg{width:100%;height:auto;display:block}
+@keyframes crossSky{from{transform:translateX(-200px)}to{transform:translateX(calc(100vw + 200px))}}
 .sky i{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
 .t-head{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:rgba(255,255,255,.08);border-radius:24px;padding:16px 22px;margin-bottom:16px}
@@ -590,6 +593,7 @@ function buildSky(){
   for(let i=0;i<70;i++){const d=document.createElement('i');d.style.left=((i*73)%100)+'%';d.style.top=((i*41)%100)+'%';d.style.animationDelay=((i*0.37)%3)+'s';d.style.width=d.style.height=(i%5===0?4:2)+'px';sky.appendChild(d);}
   sky.innerHTML+=`<div class="aurora"></div><div class="moon"></div>
   <svg class="hills" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true"><path d="M0 140 Q180 60 360 130 T720 120 T1080 100 T1440 140 V220 H0Z" fill="#2a1f5e" opacity=".8"/><path d="M0 180 Q240 120 480 170 T960 160 T1440 180 V220 H0Z" fill="#1a1545"/></svg>`;
+  for(let i=0;i<4;i++){const c=document.createElement('div');c.className='skycloud';c.style.top=(6+i*20)+'%';c.style.animationDuration=(55+i*12)+'s';c.style.animationDelay=(-i*14)+'s';c.innerHTML=CLOUD_SVG.replace('class="cloud"','');sky.appendChild(c);}
   document.body.prepend(sky);
   setInterval(()=>{const s=document.createElement('div');s.className='shoot';s.style.left=(Math.random()*60)+'%';s.style.top=(Math.random()*35)+'%';sky.appendChild(s);setTimeout(()=>s.remove(),1700);},6000);
 }
@@ -656,7 +660,6 @@ function renderTeacher(){
   buildSky();
   app.innerHTML=`<div class="wrap wide">
     <div class="t-head">
-      ${CLOUD_SVG.replace('class="cloud"','class="cloud c1"')}${CLOUD_SVG.replace('class="cloud"','class="cloud c2"')}
       <div class="t-brand">${MASCOT_SVG}
         <div><h1 class="t-title">論語小測驗</h1>
         <p class="muted">班級總界面　・　測驗${ROOM.ended?'已結束':'進行中'}　・　${SYNCTXT()}</p></div></div>
