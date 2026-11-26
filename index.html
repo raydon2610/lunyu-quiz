@@ -861,6 +861,8 @@ window.addEventListener('hashchange',()=>{
 /* ===== 8. 啟動 ===== */
 async function init(){
   if(TEACHER){initTeacher();return;}
+  // 掃到另一個房間的 QR 碼時，不沿用這部手機上舊房間的測驗進度
+  if(URLROOM&&ME&&ME.room!==URLROOM){ME=null;saveMe();}
   renderChild();
   if(ME&&ME.room&&!ME.done){
     if(await connect()){watch(ME.room);persist();}
