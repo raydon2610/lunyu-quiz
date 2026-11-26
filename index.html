@@ -163,7 +163,15 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .roomnum{font-size:1.2rem;margin:6px 0}
 .roomnum b{font-size:1.8rem;letter-spacing:.12em;color:var(--amber)}
 /* ---- 設計版總界面 ---- */
-.sky{position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at top,#3b3f9e 0%,#1d1f5c 55%,#12133a 100%)}
+.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 20% 0%,#5b3fa8 0%,transparent 55%),radial-gradient(ellipse at 90% 10%,#2a7fb8 0%,transparent 50%),linear-gradient(180deg,#1b1d5e 0%,#2c2f8f 55%,#3a2a78 100%)}
+.aurora{position:absolute;left:-25%;right:-25%;top:-5%;height:50%;background:linear-gradient(90deg,transparent,rgba(90,255,200,.28),rgba(130,140,255,.34),rgba(255,160,220,.22),transparent);filter:blur(28px);animation:aur 9s ease-in-out infinite alternate}
+@keyframes aur{from{transform:translateX(-6%) skewX(-8deg)}to{transform:translateX(6%) skewX(8deg)}}
+.moon{position:absolute;right:9%;top:7%;width:86px;height:86px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffbe0,#ffe27a 60%,#f5c64a);box-shadow:0 0 70px 14px rgba(255,236,150,.35);animation:moonGlow 5s ease-in-out infinite}
+@keyframes moonGlow{0%,100%{box-shadow:0 0 60px 12px rgba(255,236,150,.3)}50%{box-shadow:0 0 90px 22px rgba(255,236,150,.5)}}
+.hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;display:block}
+.shoot{position:absolute;width:160px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#fff,#ffd23f);animation:shoot 1.6s linear forwards;opacity:0}
+@keyframes shoot{0%{transform:translate(0,0) rotate(25deg);opacity:0}10%{opacity:1}100%{transform:translate(420px,240px) rotate(25deg);opacity:0}}
+.sky i{box-shadow:0 0 6px rgba(255,255,255,.8)}
 .sky i{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
 .t-head{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:rgba(255,255,255,.08);border-radius:24px;padding:16px 22px;margin-bottom:16px}
@@ -176,22 +184,22 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
 .t-title{font-size:2rem;margin:0;color:#fff;letter-spacing:.04em}
 .t-actions{position:relative}
-.t-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.t-grid{display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
 @media (max-width:900px){.t-grid{grid-template-columns:1fr}}
 .jar-panel{background:rgba(255,255,255,.08);border-radius:24px;padding:18px;text-align:center}
 .jar-title{font-size:1.4rem;color:#fff;margin:0}
 .jar-sub{color:#cfd3ff;margin:4px 0 10px;font-size:.95rem}
-.jar2{position:relative;width:200px;height:250px;margin:0 auto}
-.jar-lid{position:absolute;left:30px;right:30px;top:0;height:22px;border-radius:10px;background:linear-gradient(#e9f4ff,#9fc3ea);border:3px solid #6f8fb8;z-index:2}
-.jar-body{position:absolute;left:0;right:0;top:18px;bottom:0;border-radius:22px 22px 60px 60px;border:5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.1);overflow:hidden}
+.jar2{position:relative;width:290px;height:360px;margin:0 auto}
+.jar-lid{position:absolute;left:38px;right:38px;top:0;height:26px;border-radius:10px;background:linear-gradient(#e9f4ff,#9fc3ea);border:3px solid #6f8fb8;z-index:2}
+.jar-body{position:absolute;left:0;right:0;top:22px;bottom:0;border-radius:22px 22px 60px 60px;border:5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.1);overflow:hidden}
 .jar-water{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#7fd3ff,#2b8fe0);transition:height 1.2s cubic-bezier(.3,.7,.3,1);opacity:.85}
 .jar-water::before{content:"";position:absolute;left:-10%;right:-10%;top:-10px;height:22px;background:radial-gradient(ellipse at 50% 100%,#bfeaff 40%,transparent 42%) 0 0/28px 22px repeat-x;animation:wave 2.2s linear infinite}
 @keyframes wave{to{background-position:28px 0}}
 .jar-shine{position:absolute;left:14px;top:30px;bottom:30px;width:10px;border-radius:8px;background:rgba(255,255,255,.45)}
-.jar-star{position:absolute;width:26px;height:26px;animation:float 3s ease-in-out infinite}
+.jar-star{position:absolute;width:32px;height:32px;animation:float 3s ease-in-out infinite}
 .jar-star svg{width:100%;height:100%;display:block}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.jar-count{margin-top:10px;font-size:1.35rem;font-weight:800;color:#ffd23f}
+.jar-count{margin-top:12px;font-size:1.5rem;font-weight:800;color:#ffd23f}
 .joinbox2{display:flex;gap:12px;align-items:center;margin-top:14px;text-align:left;flex-wrap:wrap;justify-content:center}
 .joinbox2 .qr{width:150px;height:150px}
 .small-url{word-break:break-all;font-size:.75rem}
@@ -217,6 +225,12 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .detail .muted{color:#5a5e8a}
 .detail .btn.ghost{color:#23244f;border-color:#23244f}
 .sm-url{word-break:break-all}
+.pcard{animation:popin .5s cubic-bezier(.3,1.4,.6,1) both}
+.cards .pcard:nth-child(3n+2){animation-delay:.08s}.cards .pcard:nth-child(3n){animation-delay:.16s}
+@keyframes popin{from{opacity:0;transform:translateY(16px) scale(.92)}to{opacity:1;transform:none}}
+.jar-shine{animation:glint 4s ease-in-out infinite}
+@keyframes glint{0%,100%{opacity:.5}50%{opacity:1}}
+.warn{background:#fff3c4;color:#6b4a00;border-radius:14px;padding:8px 12px;margin:8px 0 0;font-size:.9rem;font-weight:700}
 </style>
 </head>
 <body>
@@ -282,8 +296,8 @@ const OCHOICE=[
 ];
 const YREAD=[['司馬牛問君子子曰君子不憂不懼',4],['不憂不懼斯謂之君子矣乎',4],['子曰內省不疚夫何憂何懼',4],['司馬牛憂曰人皆有兄弟我獨亡',5],['子夏曰商聞之矣死生有命富貴在天',5],['君子敬而無失與人恭而有禮',5],['子張問明子曰浸潤之譖膚受之愬',6],['浸潤之譖膚受之愬不行焉',6]]
   .map(([t,ch])=>({kind:'read',label:'讀誦',ch,text:t,prompt:'老師唸一句，你跟著讀',listen:t}));
-const WCHARS_Y=[["司",4],["馬",4],["牛",4],["君",4],["子",4],["曰",4],["不",4],["之",4],["矣",4],["乎",4],["內",4],["省",4],["疚",4],["夫",4],["何",4],["人",5],["皆",5],["有",5],["兄",5],["弟",5],["我",5],["亡",5],["夏",5],["死",5],["生",5],["命",5],["在",5],["天",5],["而",5],["失",5],["恭",5],["四",5],["海",5],["也",5],["明",6],["浸",6],["受",6],["行",6],["可",6],["已",6]];
-const WCHARS_O=[["馬",4],["問",4],["憂",4],["懼",4],["斯",4],["謂",4],["獨",5],["夏",5],["商",5],["聞",5],["富",5],["貴",5],["敬",5],["無",5],["與",5],["恭",5],["禮",5],["海",5],["患",5],["張",6],["浸",6],["潤",6],["譖",6],["膚",6],["焉",6],["遠",6]];
+const WCHARS_Y=[["司", 4], ["省", 4], ["命", 5], ["君", 4], ["子", 4], ["曰", 4], ["不", 4], ["之", 4], ["矣", 4], ["乎", 4], ["內", 4], ["疚", 4], ["夫", 4], ["何", 4], ["人", 5], ["皆", 5], ["有", 5], ["兄", 5], ["弟", 5], ["我", 5], ["亡", 5], ["夏", 5], ["死", 5], ["生", 5], ["在", 5], ["天", 5], ["而", 5], ["失", 5], ["恭", 5], ["四", 5], ["海", 5], ["也", 5], ["明", 6], ["浸", 6], ["受", 6], ["行", 6], ["可", 6], ["已", 6]];
+const WCHARS_O=[["富", 5], ["聞", 5], ["憂", 4], ["懼", 4], ["斯", 4], ["謂", 4], ["獨", 5], ["夏", 5], ["商", 5], ["貴", 5], ["敬", 5], ["無", 5], ["與", 5], ["恭", 5], ["禮", 5], ["海", 5], ["患", 5], ["張", 6], ["浸", 6], ["潤", 6], ["譖", 6], ["膚", 6], ["焉", 6], ["遠", 6]];
 const YWRITE=WCHARS_Y.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:false,prompt:'照著淡淡的字，描一描',listen:`描一描，${c}`}));
 const OWRITE=WCHARS_O.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:true,prompt:'看上面的字，在下面寫一寫',listen:`寫一寫，${c}`}));
 const ORECITE=[['不憂不懼斯謂之君子矣乎',4],['子曰內省不疚夫何憂何懼',4],['四海之內皆兄弟也君子何患乎無兄弟也',5],['君子敬而無失與人恭而有禮',5],['子夏曰商聞之矣死生有命富貴在天',5],['司馬牛憂曰人皆有兄弟我獨亡',5],['浸潤之譖膚受之愬不行焉可謂明也已矣',6]]
@@ -303,10 +317,11 @@ const OPAIR=PAIRS.map(p=>({kind:'pair',label:'前後句',ch:p.ch,front:p.front,b
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const pick=(a,k)=>shuffle(a).slice(0,k);
 function makeQuiz(band){
+  // 同年齡統一題目：每位小朋友同一套 15 題、同一順序、同一選項順序
   const parts=band==='young'
-    ? [...pick(YREAD,4),...pick(YWRITE,4),...pick(YCHOICE,7)]
-    : [...pick(ORECITE,4),...pick(OWRITE,3),...pick(OCHOICE,4),...pick(OPAIR,4)];
-  return shuffle(parts).map((q,i)=>{const o={...q,n:i+1};if(o.opts)o.opts=shuffle(o.opts);return o;});
+    ? [...YREAD.slice(0,4),...YWRITE.slice(0,4),...YCHOICE.slice(0,7)]
+    : [...ORECITE.slice(0,4),...OWRITE.slice(0,3),...OCHOICE.slice(0,4),...OPAIR.slice(0,4)];
+  return parts.map((q,i)=>({...q,n:i+1,opts:q.opts?q.opts.slice():undefined}));
 }
 
 /* ===== 3. 工具：字串、朗讀、音效、彩帶 ===== */
@@ -325,7 +340,7 @@ try{Object.assign(SET,JSON.parse(localStorage.getItem('lunyu-v2-set')||'{}'));}c
 const saveSet=()=>{try{localStorage.setItem('lunyu-v2-set',JSON.stringify(SET));}catch(e){}};
 
 let voice=null;
-function pickVoice(){if(!('speechSynthesis' in window))return;const v=speechSynthesis.getVoices();voice=v.find(x=>/zh[-_]TW/i.test(x.lang))||v.find(x=>/zh/i.test(x.lang))||null;}
+function pickVoice(){if(!('speechSynthesis' in window))return;const v=speechSynthesis.getVoices();voice=v.find(x=>/zh[-_]TW/i.test(x.lang))||v.find(x=>/zh[-_]HK/i.test(x.lang))||v.find(x=>/zh/i.test(x.lang))||null;}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
 function speak(t){if(!t||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'zh-TW';if(voice)u.voice=voice;u.rate=.7;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
 let AC;
@@ -544,7 +559,10 @@ function buildSky(){
   if(document.querySelector('.sky'))return;
   const sky=document.createElement('div');sky.className='sky';sky.setAttribute('aria-hidden','true');
   for(let i=0;i<70;i++){const d=document.createElement('i');d.style.left=((i*73)%100)+'%';d.style.top=((i*41)%100)+'%';d.style.animationDelay=((i*0.37)%3)+'s';d.style.width=d.style.height=(i%5===0?4:2)+'px';sky.appendChild(d);}
+  sky.innerHTML+=`<div class="aurora"></div><div class="moon"></div>
+  <svg class="hills" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true"><path d="M0 140 Q180 60 360 130 T720 120 T1080 100 T1440 140 V220 H0Z" fill="#2a1f5e" opacity=".8"/><path d="M0 180 Q240 120 480 170 T960 160 T1440 180 V220 H0Z" fill="#1a1545"/></svg>`;
   document.body.prepend(sky);
+  setInterval(()=>{const s=document.createElement('div');s.className='shoot';s.style.left=(Math.random()*60)+'%';s.style.top=(Math.random()*35)+'%';sky.appendChild(s);setTimeout(()=>s.remove(),1700);},6000);
 }
 function jarStarsHTML(total,pct){
   const n=Math.min(total,90);let h='';
@@ -619,6 +637,7 @@ function renderTeacher(){
         <button class="btn ghost" data-act="newroom" ${ready?'':'disabled'}>${T.arm==='newroom'?'再按一次，確定開新房間':'開新房間'}</button>
         <button class="btn ghost" data-act="child">小朋友頁面</button></div>
     </div>
+    ${voice?'':'<p class="warn">此裝置沒有中文語音，朗讀會不是中文。請到手機「設定 → 語言與輸入 → 文字轉語音」安裝中文（台灣）語音，然後重新開啟頁面。</p>'}
     <div class="t-grid">
       <aside class="jar-panel">
         <h2 class="jar-title">班級星星罐</h2>
