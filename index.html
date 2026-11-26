@@ -253,9 +253,15 @@ function pyOf(frag,ch){
   for(const k of [ch,4,5,6]){const i=CH_TEXT[k]?CH_TEXT[k].indexOf(frag):-1;if(i>=0)return CH_PY[k].slice(i,i+frag.length);}
   return [...frag].map(()=>'');
 }
+const PUNCT_RE=/[，。、：；？！「」『』《》（）]/;
 function ruby(frag,ch,hide,src){
-  const py=pyOf(src||frag,ch);
-  return [...frag].map((c,i)=>c==='＿'?'<span class="blank"></span>':`<ruby>${c}<rt>${hide?'':(py[i]||'')}</rt></ruby>`).join('');
+  const py=pyOf(src||frag.replace(/[，。、：；？！「」『』《》（）]/g,''),ch);
+  let k=0;
+  return [...frag].map(c=>{
+    if(PUNCT_RE.test(c))return `<span class="pu">${c}</span>`;
+    if(c==='＿')return '<span class="blank"></span>';
+    const r=`<ruby>${c}<rt>${hide?'':(py[k]||'')}</rt></ruby>`;k++;return r;
+  }).join('');
 }
 const LEARN={
   4:[['司馬牛問君子。','sī mǎ niú wèn jūn zǐ'],['子曰：「君子不憂不懼。」','zǐ yuē jūn zǐ bù yōu bú jù'],['曰：「不憂不懼，斯謂之君子矣乎？」','yuē bù yōu bú jù sī wèi zhī jūn zǐ yǐ hū'],['子曰：「內省不疚，夫何憂何懼？」','zǐ yuē nèi xǐng bú jiù fú hé yōu hé jù']],
@@ -294,14 +300,29 @@ const OCHOICE=[
   F.fill(6,'子張問明','明',['明','牛','君']),F.fill(6,'不行焉可謂明也已矣','明',['明','禮','天']),
   F.fill(6,'浸潤之譖','譖',['譖','膚','愬'])
 ];
-const YREAD=[['司馬牛問君子子曰君子不憂不懼',4],['不憂不懼斯謂之君子矣乎',4],['子曰內省不疚夫何憂何懼',4],['司馬牛憂曰人皆有兄弟我獨亡',5],['子夏曰商聞之矣死生有命富貴在天',5],['君子敬而無失與人恭而有禮',5],['子張問明子曰浸潤之譖膚受之愬',6],['浸潤之譖膚受之愬不行焉',6]]
-  .map(([t,ch])=>({kind:'read',label:'讀誦',ch,text:t,prompt:'老師唸一句，你跟著讀',listen:t}));
+const YREAD=[
+  ['司馬牛問君子子曰君子不憂不懼',4,'司馬牛問君子，子曰：「君子不憂不懼。」'],
+  ['不憂不懼斯謂之君子矣乎',4,'不憂不懼，斯謂之君子矣乎？'],
+  ['子曰內省不疚夫何憂何懼',4,'子曰：「內省不疚，夫何憂何懼？」'],
+  ['司馬牛憂曰人皆有兄弟我獨亡',5,'司馬牛憂曰：「人皆有兄弟，我獨亡！」'],
+  ['子夏曰商聞之矣死生有命富貴在天',5,'子夏曰：「商聞之矣：死生有命，富貴在天。」'],
+  ['君子敬而無失與人恭而有禮',5,'君子敬而無失，與人恭而有禮。'],
+  ['子張問明子曰浸潤之譖膚受之愬',6,'子張問明。子曰：「浸潤之譖，膚受之愬。」'],
+  ['浸潤之譖膚受之愬不行焉',6,'浸潤之譖，膚受之愬，不行焉。']
+].map(([t,ch,sh])=>({kind:'read',label:'讀誦',ch,text:t,shown:sh,prompt:'老師唸一句，你跟著讀',listen:t}));
 const WCHARS_Y=[["司", 4], ["省", 4], ["命", 5], ["君", 4], ["子", 4], ["曰", 4], ["不", 4], ["之", 4], ["矣", 4], ["乎", 4], ["內", 4], ["疚", 4], ["夫", 4], ["何", 4], ["人", 5], ["皆", 5], ["有", 5], ["兄", 5], ["弟", 5], ["我", 5], ["亡", 5], ["夏", 5], ["死", 5], ["生", 5], ["在", 5], ["天", 5], ["而", 5], ["失", 5], ["恭", 5], ["四", 5], ["海", 5], ["也", 5], ["明", 6], ["浸", 6], ["受", 6], ["行", 6], ["可", 6], ["已", 6]];
 const WCHARS_O=[["富", 5], ["聞", 5], ["憂", 4], ["懼", 4], ["斯", 4], ["謂", 4], ["獨", 5], ["夏", 5], ["商", 5], ["貴", 5], ["敬", 5], ["無", 5], ["與", 5], ["恭", 5], ["禮", 5], ["海", 5], ["患", 5], ["張", 6], ["浸", 6], ["潤", 6], ["譖", 6], ["膚", 6], ["焉", 6], ["遠", 6]];
 const YWRITE=WCHARS_Y.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:false,prompt:'照著淡淡的字，描一描',listen:`描一描，${c}`}));
 const OWRITE=WCHARS_O.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:true,prompt:'看上面的字，在下面寫一寫',listen:`寫一寫，${c}`}));
-const ORECITE=[['不憂不懼斯謂之君子矣乎',4],['子曰內省不疚夫何憂何懼',4],['四海之內皆兄弟也君子何患乎無兄弟也',5],['君子敬而無失與人恭而有禮',5],['子夏曰商聞之矣死生有命富貴在天',5],['司馬牛憂曰人皆有兄弟我獨亡',5],['浸潤之譖膚受之愬不行焉可謂明也已矣',6]]
-  .map(([t,ch])=>({kind:'recite',label:'背誦',ch,text:t,prompt:'背一背，想不起來可以按「看字」',listen:t}));
+const ORECITE=[
+  ['不憂不懼斯謂之君子矣乎',4,'不憂不懼，斯謂之君子矣乎？'],
+  ['子曰內省不疚夫何憂何懼',4,'子曰：「內省不疚，夫何憂何懼？」'],
+  ['四海之內皆兄弟也君子何患乎無兄弟也',5,'四海之內皆兄弟也，君子何患乎無兄弟也？'],
+  ['君子敬而無失與人恭而有禮',5,'君子敬而無失，與人恭而有禮。'],
+  ['子夏曰商聞之矣死生有命富貴在天',5,'子夏曰：「商聞之矣：死生有命，富貴在天。」'],
+  ['司馬牛憂曰人皆有兄弟我獨亡',5,'司馬牛憂曰：「人皆有兄弟，我獨亡！」'],
+  ['浸潤之譖膚受之愬不行焉可謂明也已矣',6,'浸潤之譖，膚受之愬，不行焉，可謂明也已矣！']
+].map(([t,ch,sh])=>({kind:'recite',label:'背誦',ch,text:t,shown:sh,prompt:'背一背，想不起來可以按「看字」',listen:t}));
 const PAIRS=[
   {ch:4,front:'內省不疚',back:'夫何憂何懼',opts:['夫何憂何懼','四海之內皆兄弟也','與人恭而有禮','富貴在天']},
   {ch:4,front:'不憂不懼',back:'斯謂之君子矣乎',opts:['斯謂之君子矣乎','富貴在天','皆兄弟也','夫何憂何懼']},
@@ -316,12 +337,26 @@ const OPAIR=PAIRS.map(p=>({kind:'pair',label:'前後句',ch:p.ch,front:p.front,b
 
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const pick=(a,k)=>shuffle(a).slice(0,k);
+function detShuffle(a,seed){
+  let h=2166136261;for(const c of String(seed)){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;}
+  const r=a.slice();
+  for(let i=r.length-1;i>0;i--){h=(Math.imul(h,1664525)+1013904223)>>>0;const j=(h>>>8)%(i+1);[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+function placeOpts(q,i,band){
+  // 正確答案依題號輪流放在第 1、2、3…格，其餘選項用固定的亂序排列
+  const others=detShuffle(q.opts.filter(o=>o!==q.ans),band+'|'+i+'|'+(q.prompt||'')+'|'+(q.listen||''));
+  const slot=i%q.opts.length;
+  others.splice(slot,0,q.ans);
+  return others;
+}
 function makeQuiz(band){
   // 同年齡統一題目：每位小朋友同一套 15 題、同一順序、同一選項順序
   const parts=band==='young'
     ? [...YREAD.slice(0,4),...YWRITE.slice(0,4),...YCHOICE.slice(0,7)]
     : [...ORECITE.slice(0,4),...OWRITE.slice(0,3),...OCHOICE.slice(0,4),...OPAIR.slice(0,4)];
-  return parts.map((q,i)=>({...q,n:i+1,opts:q.opts?q.opts.slice():undefined}));
+  // 選項順序固定但每題不同（同一題對所有小朋友都一樣），避免正確答案都在第一格
+  return parts.map((q,i)=>({...q,n:i+1,opts:q.opts?placeOpts(q,i,band):undefined}));
 }
 
 /* ===== 3. 工具：字串、朗讀、音效、彩帶 ===== */
@@ -367,7 +402,7 @@ function bodyHTML(q){
     return sh+`<div class="ans ${pyc}">${q.opts.map((o,k)=>optHTML(q,o,k)).join('')}</div>`;
   }
   if(q.kind==='pair')return `<div class="show line ${pyc}">${ruby(q.front,q.ch)}</div><div class="ans sent ${pyc}">${q.opts.map((o,k)=>optHTML(q,o,k)).join('')}</div>`;
-  if(q.kind==='read')return `<div class="show line ${pyc}">${ruby(q.text,q.ch)}</div>`+judgeBar([['listen','🔊 再聽一次','blue'],['judge','✔ 讀對了','good',1],['judge','✘ 讀錯了','red',0]]);
+  if(q.kind==='read')return `<div class="show line ${pyc}">${ruby(q.shown,q.ch,false,q.text)}</div>`+judgeBar([['listen','🔊 再聽一次','blue'],['judge','✔ 讀對了','good',1],['judge','✘ 讀錯了','red',0]]);
   if(q.kind==='recite')return `<div class="show line" id="rtext">${'？'.repeat(Math.min(q.text.length,10))}</div>`+judgeBar([['listen','🔊 聽一遍','blue'],['peek','👀 看字','ghost'],['judge','✔ 背對了','good',1],['judge','✘ 背錯了','red',0]]);
   if(q.kind==='write'){
     return (q.model?`<div class="show">${ruby(q.char,q.ch)}</div>`:'')+
@@ -443,7 +478,7 @@ function judge(ok){
 function peek(){
   const q=curQ();const el=$('#rtext');if(!el||!q||q.kind!=='recite')return;
   S.peek=!S.peek;
-  el.innerHTML=S.peek?ruby(q.text,q.ch):'？'.repeat(Math.min(q.text.length,10));
+  el.innerHTML=S.peek?ruby(q.shown,q.ch,false,q.text):'？'.repeat(Math.min(q.text.length,10));
 }
 function nextQ(){
   if(!S.locked)return;
