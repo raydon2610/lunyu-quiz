@@ -189,7 +189,7 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .jar-panel{background:rgba(255,255,255,.08);border-radius:24px;padding:18px;text-align:center}
 .jar-title{font-size:1.4rem;color:#fff;margin:0}
 .jar-sub{color:#cfd3ff;margin:4px 0 10px;font-size:.95rem}
-.jar2{position:relative;width:290px;height:360px;margin:0 auto}
+.jar2{position:relative;width:290px;height:360px;margin:58px auto 0}
 .jar-lid{position:absolute;left:38px;right:38px;top:0;height:26px;border-radius:10px;background:linear-gradient(#e9f4ff,#9fc3ea);border:3px solid #6f8fb8;z-index:2}
 .jar-body{position:absolute;left:0;right:0;top:22px;bottom:0;border-radius:22px 22px 60px 60px;border:5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.1);overflow:hidden}
 .jar-water{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#7fd3ff,#2b8fe0);transition:height 1.2s cubic-bezier(.3,.7,.3,1);opacity:.85}
@@ -199,7 +199,7 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .jar-star{position:absolute;width:32px;height:32px;animation:float 3s ease-in-out infinite}
 .jar-star svg{width:100%;height:100%;display:block}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.jar-count{margin-top:12px;font-size:1.5rem;font-weight:800;color:#ffd23f}
+.jar-count{position:absolute;left:0;right:0;top:-54px;text-align:center;font-size:1.5rem;font-weight:800;color:#ffd23f}
 .joinbox2{display:flex;gap:12px;align-items:center;margin-top:14px;text-align:left;flex-wrap:wrap;justify-content:center}
 .joinbox2 .qr{width:150px;height:150px}
 .small-url{word-break:break-all;font-size:.75rem}
@@ -279,10 +279,8 @@ const F={
   fill:(ch,full,hide,o)=>{const i=full.indexOf(hide);return{kind:'choice',mode:'char',label:'選擇題',ch,prompt:'缺了哪一個字？',listen:full.slice(0,i)+'什麼'+full.slice(i+hide.length),show:full.slice(0,i)+'＿'.repeat(hide.length)+full.slice(i+hide.length),src:full,showSize:'line',opts:o,ans:hide};},
 };
 const YCHOICE=[
-  F.hear(4,'君子',['君子','內省','夫何']),
-  F.hear(4,'不憂不懼',['不憂不懼','內省不疚','司馬牛']),
-  F.hear(4,'內省不疚',['內省不疚','不憂不懼','富貴在天']),
-  F.hear(4,'夫何憂何懼',['夫何憂何懼','司馬牛問','子張問']),
+  F.hear(4,'君子',['君子','司馬牛','子夏']),
+  F.hear(4,'不憂不懼',['不憂不懼','死生有命','富貴在天']),
   F.hear(5,'兄弟',['兄弟','富貴','君子']),
   F.hear(5,'四海之內',['四海之內','死生有命','恭而有禮']),
   F.hear(5,'富貴在天',['富貴在天','死生有命','敬而無失']),
@@ -292,9 +290,8 @@ const YCHOICE=[
   F.hear(6,'不行焉',['不行焉','可謂明','可謂遠'])
 ];
 const OCHOICE=[
-  F.fill(4,'君子不憂不懼','懼',['懼','疚','禮']),F.fill(4,'內省不疚','疚',['疚','懼','憂']),
-  F.fill(4,'司馬牛問君子','牛',['牛','馬','子']),
-  F.fill(5,'四海之內皆兄弟也','兄弟',['兄弟','君子','內省']),F.fill(5,'與人恭而有禮','禮',['禮','命','海']),
+  F.fill(4,'君子不憂不懼','懼',['懼','憂','海']),F.fill(4,'司馬牛問君子','牛',['牛','馬','子']),
+  F.fill(5,'四海之內皆兄弟也','兄弟',['兄弟','君子','富貴']),F.fill(5,'與人恭而有禮','禮',['禮','命','海']),
   F.fill(5,'君子敬而無失','失',['失','海','內']),F.fill(5,'富貴在天','天',['天','海','弟']),
   F.fill(5,'死生有命','命',['命','富','兄']),
   F.fill(6,'子張問明','明',['明','牛','君']),F.fill(6,'不行焉可謂明也已矣','明',['明','禮','天']),
@@ -303,20 +300,18 @@ const OCHOICE=[
 const YREAD=[
   ['司馬牛問君子子曰君子不憂不懼',4,'司馬牛問君子，子曰：「君子不憂不懼。」'],
   ['不憂不懼斯謂之君子矣乎',4,'不憂不懼，斯謂之君子矣乎？'],
-  ['子曰內省不疚夫何憂何懼',4,'子曰：「內省不疚，夫何憂何懼？」'],
   ['司馬牛憂曰人皆有兄弟我獨亡',5,'司馬牛憂曰：「人皆有兄弟，我獨亡！」'],
   ['子夏曰商聞之矣死生有命富貴在天',5,'子夏曰：「商聞之矣：死生有命，富貴在天。」'],
   ['君子敬而無失與人恭而有禮',5,'君子敬而無失，與人恭而有禮。'],
   ['子張問明子曰浸潤之譖膚受之愬',6,'子張問明。子曰：「浸潤之譖，膚受之愬。」'],
   ['浸潤之譖膚受之愬不行焉',6,'浸潤之譖，膚受之愬，不行焉。']
 ].map(([t,ch,sh])=>({kind:'read',label:'讀誦',ch,text:t,shown:sh,prompt:'老師唸一句，你跟著讀',listen:t}));
-const WCHARS_Y=[["司", 4], ["省", 4], ["命", 5], ["君", 4], ["子", 4], ["曰", 4], ["不", 4], ["之", 4], ["矣", 4], ["乎", 4], ["內", 4], ["疚", 4], ["夫", 4], ["何", 4], ["人", 5], ["皆", 5], ["有", 5], ["兄", 5], ["弟", 5], ["我", 5], ["亡", 5], ["夏", 5], ["死", 5], ["生", 5], ["在", 5], ["天", 5], ["而", 5], ["失", 5], ["恭", 5], ["四", 5], ["海", 5], ["也", 5], ["明", 6], ["浸", 6], ["受", 6], ["行", 6], ["可", 6], ["已", 6]];
+const WCHARS_Y=[["司", 4], ["海", 5], ["命", 5], ["君", 4], ["省", 4], ["子", 4], ["曰", 4], ["不", 4], ["之", 4], ["矣", 4], ["乎", 4], ["內", 4], ["疚", 4], ["夫", 4], ["何", 4], ["人", 5], ["皆", 5], ["有", 5], ["兄", 5], ["弟", 5], ["我", 5], ["亡", 5], ["夏", 5], ["死", 5], ["生", 5], ["在", 5], ["天", 5], ["而", 5], ["失", 5], ["恭", 5], ["四", 5], ["也", 5], ["明", 6], ["浸", 6], ["受", 6], ["行", 6], ["可", 6], ["已", 6]];
 const WCHARS_O=[["富", 5], ["聞", 5], ["憂", 4], ["懼", 4], ["斯", 4], ["謂", 4], ["獨", 5], ["夏", 5], ["商", 5], ["貴", 5], ["敬", 5], ["無", 5], ["與", 5], ["恭", 5], ["禮", 5], ["海", 5], ["患", 5], ["張", 6], ["浸", 6], ["潤", 6], ["譖", 6], ["膚", 6], ["焉", 6], ["遠", 6]];
 const YWRITE=WCHARS_Y.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:false,prompt:'照著淡淡的字，描一描',listen:`描一描，${c}`}));
 const OWRITE=WCHARS_O.map(([c,ch])=>({kind:'write',label:'寫字',ch,char:c,model:true,prompt:'看上面的字，在下面寫一寫',listen:`寫一寫，${c}`}));
 const ORECITE=[
   ['不憂不懼斯謂之君子矣乎',4,'不憂不懼，斯謂之君子矣乎？'],
-  ['子曰內省不疚夫何憂何懼',4,'子曰：「內省不疚，夫何憂何懼？」'],
   ['四海之內皆兄弟也君子何患乎無兄弟也',5,'四海之內皆兄弟也，君子何患乎無兄弟也？'],
   ['君子敬而無失與人恭而有禮',5,'君子敬而無失，與人恭而有禮。'],
   ['子夏曰商聞之矣死生有命富貴在天',5,'子夏曰：「商聞之矣：死生有命，富貴在天。」'],
@@ -324,13 +319,12 @@ const ORECITE=[
   ['浸潤之譖膚受之愬不行焉可謂明也已矣',6,'浸潤之譖，膚受之愬，不行焉，可謂明也已矣！']
 ].map(([t,ch,sh])=>({kind:'recite',label:'背誦',ch,text:t,shown:sh,prompt:'背一背，想不起來可以按「看字」',listen:t}));
 const PAIRS=[
-  {ch:4,front:'內省不疚',back:'夫何憂何懼',opts:['夫何憂何懼','四海之內皆兄弟也','與人恭而有禮','富貴在天']},
-  {ch:4,front:'不憂不懼',back:'斯謂之君子矣乎',opts:['斯謂之君子矣乎','富貴在天','皆兄弟也','夫何憂何懼']},
-  {ch:5,front:'死生有命',back:'富貴在天',opts:['富貴在天','皆兄弟也','與人恭而有禮','夫何憂何懼']},
-  {ch:5,front:'君子敬而無失',back:'與人恭而有禮',opts:['與人恭而有禮','四海之內皆兄弟也','夫何憂何懼','富貴在天']},
-  {ch:5,front:'四海之內',back:'皆兄弟也',opts:['皆兄弟也','富貴在天','夫何憂何懼','與人恭而有禮']},
-  {ch:5,front:'人皆有兄弟',back:'我獨亡',opts:['我獨亡','富貴在天','與人恭而有禮','夫何憂何懼']},
-  {ch:6,front:'浸潤之譖膚受之愬',back:'不行焉',opts:['不行焉','富貴在天','皆兄弟也','夫何憂何懼']},
+  {ch:4,front:'不憂不懼',back:'斯謂之君子矣乎',opts:['斯謂之君子矣乎','富貴在天','皆兄弟也','死生有命']},
+  {ch:5,front:'死生有命',back:'富貴在天',opts:['富貴在天','皆兄弟也','與人恭而有禮','我獨亡']},
+  {ch:5,front:'君子敬而無失',back:'與人恭而有禮',opts:['與人恭而有禮','四海之內皆兄弟也','我獨亡','富貴在天']},
+  {ch:5,front:'四海之內',back:'皆兄弟也',opts:['皆兄弟也','富貴在天','我獨亡','與人恭而有禮']},
+  {ch:5,front:'人皆有兄弟',back:'我獨亡',opts:['我獨亡','富貴在天','與人恭而有禮','皆兄弟也']},
+  {ch:6,front:'浸潤之譖膚受之愬',back:'不行焉',opts:['不行焉','富貴在天','皆兄弟也','斯謂之君子矣乎']},
   {ch:6,front:'不行焉',back:'可謂明也已矣',opts:['可謂明也已矣','皆兄弟也','與人恭而有禮','死生有命']}
 ];
 const OPAIR=PAIRS.map(p=>({kind:'pair',label:'前後句',ch:p.ch,front:p.front,back:p.back,opts:p.opts,ans:p.back,prompt:'聽前半句，找後半句',listen:p.front}));
@@ -377,7 +371,7 @@ const saveSet=()=>{try{localStorage.setItem('lunyu-v2-set',JSON.stringify(SET));
 let voice=null;
 function pickVoice(){if(!('speechSynthesis' in window))return;const v=speechSynthesis.getVoices();voice=v.find(x=>/zh[-_]TW/i.test(x.lang))||v.find(x=>/zh[-_]HK/i.test(x.lang))||v.find(x=>/zh/i.test(x.lang))||null;}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
-function speak(t){if(!t||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'zh-TW';if(voice)u.voice=voice;u.rate=.7;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
+function speak(t){if(!t||!('speechSynthesis' in window))return;t=t.replace(/亡/g,'無').replace(/省/g,'醒');try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'zh-TW';if(voice)u.voice=voice;u.rate=.7;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
 let AC;
 function tone(freqs,dur=.12,type='sine',vol=.16){if(!SET.snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime;freqs.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(vol,t+i*dur);g.gain.exponentialRampToValueAtTime(.001,t+i*dur+dur*1.8);o.connect(g);g.connect(AC.destination);o.start(t+i*dur);o.stop(t+i*dur+dur*2);});}catch(e){}}
 const yay=()=>tone([523,659,784,1047]),oops=()=>tone([247,208],.16,'triangle',.18);
