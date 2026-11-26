@@ -162,7 +162,6 @@ rt{font-family:var(--ui);font-weight:500;font-size:.34em;letter-spacing:.02em;co
 .qr svg{width:100%;height:100%;display:block}
 .roomnum{font-size:1.2rem;margin:6px 0}
 .roomnum b{font-size:1.8rem;letter-spacing:.12em;color:var(--amber)}
-
 /* ---- 設計版總界面 ---- */
 .sky{position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at top,#3b3f9e 0%,#1d1f5c 55%,#12133a 100%)}
 .sky i{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
@@ -600,6 +599,188 @@ function animateGains(list){
 }
 
 /* ===== 6d. 老師總界面 ===== */
+function renderTeacher(){
+  VIEW='teacher';
+  const list=PLAYERS.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'zh-Hant'));
+  const total=list.reduce((s,p)=>s+(p.stars||0),0);
+  const cap=Math.max(15,list.length*15);
+  const sel=list.find(p=>p.id===T.sel);
+  const ready=CONFIGURED&&/^\d{6}$/.test(TROOM);
+  buildSky();
+  app.innerHTML=`<div class="wrap wide">
+    <div class="t-head">
+      ${CLOUD_SVG.replace('class="cloud"','class="cloud c1"')}${CLOUD_SVG.replace('class="cloud"','class="cloud c2"')}
+      <div class="t-brand">${MASCOT_SVG}
+        <div><h1 class="t-title">論語小測驗</h1>
+        <p class="muted">班級總界面　・　測驗${ROOM.ended?'已結束':'進行中'}　・　${SYNCTXT()}</p></div></div>
+      <div class="row t-actions">
+        <button class="btn ${ROOM.ended?'good':'red'}" data-act="endroom" ${ready?'':'disabled'}>${ROOM.ended?'重新開放':'結束測驗'}</button>
+        <button class="btn ghost" data-act="csvall" ${ready?'':'disabled'}>下載全班成績</button>
+        <button class="btn ghost" data-act="newroom" ${ready?'':'disabled'}>${T.arm==='newroom'?'再按一次，確定開新房間':'開新房間'}</button>
+        <button class="btn ghost" data-act="child">小朋友頁面</button></div>
+    </div>
+    <div class="t-grid">
+      <aside class="jar-panel">
+        <h2 class="jar-title">班級星星罐</h2>
+        <p class="jar-sub">全班一起集星星，目標 ${cap} ⭐</p>
+        ${jarHTML(total,cap)}
+        <div class="joinbox2">
+          <div id="qr" class="qr" aria-label="掃碼加入的 QR 碼"></div>
+          <div><p class="muted">房間號碼</p><p class="roomnum"><b>${ready?esc(TROOM):'—'}</b></p>
+            <p class="muted small-url">${ready?esc(joinURL()):'尚未設定資料庫'}</p></div>
+        </div>
+      </aside>
+      <section>
+        <div class="cards">${list.map(cardHTML).join('')||'<div class="empty-state">'+MASCOT_SVG+'<p>還沒有小朋友加入。<br>請小朋友掃 QR 碼，或輸入左邊的房間號碼。</p></div>'}</div>
+      </section>
+    </div>
+    ${sel?detailHTML(sel):''}
+    </div>`;
+  if(ready&&window.qrcode){
+    try{const qr=qrcode(0,'M');qr.addData(joinURL());qr.make();document.getElementById('qr').innerHTML=qr.createSvgTag({cellSize:5,margin:2});}catch(e){}
+  }
+  animateGains(list);
+}
+
+
+/* ===== 4. 設定、狀態與資料庫（Firebase，小朋友免登入） ===== */
+/* 老師一次性設定：把 Firebase 專案的設定貼到下面（見設定說明） */
+const FIREBASE_CONFIG={apiKey:'AIzaSyBJ89GeTX7OYfnGnOG55O4qirGayuumn78',authDomain:'lunyu-quiz.firebaseapp.com',projectId:'lunyu-quiz',storageBucket:'lunyu-quiz.firebasestorage.app',messagingSenderId:'132061025853',appId:'1:132061025853:web:f3e96d837e79b189fb3c54'};
+const CONFIGURED=!String(FIREBASE_CONFIG.projectId).startsWith('PASTE_HERE');
+
+let ME=null;
+try{ME=JSON.parse(localStorage.getItem('lunyu-cls-me')||'null');}catch(e){ME=null;}
+const saveMe=()=>{try{if(ME)localStorage.setItem('lunyu-cls-me',JSON.stringify(ME));else localStorage.removeItem('lunyu-cls-me');}catch(e){}};
+let TEACHER=location.hash==='#teacher';
+let VIEW='';
+let FS=null,AUTH=null,CONNECTED=false;
+let ROOM={ended:false},PLAYERS=[],SYNC='';
+let unsubs=[];
+let TROOM=(()=>{try{return localStorage.getItem('lunyu-cls-troom')||'';}catch(e){return '';}})();
+const URLROOM=(new URLSearchParams(location.search).get('r')||'').replace(/\D/g,'').slice(0,6);
+let CH={code:URLROOM,name:'',avatar:'',band:''};
+let S={locked:false,peek:false,learnCh:4};
+let T={sel:null,arm:null};
+const SYNCTXT=()=>`<span id="sync">${esc(SYNC)}</span>`;
+function setSync(t){SYNC=t;const el=document.getElementById('sync');if(el)el.textContent=t;}
+const newCode=()=>String(Math.floor(100000+Math.random()*900000));
+const roomRef=c=>FS.collection('rooms').doc(c);
+const playersCol=c=>roomRef(c).collection('players');
+
+async function connect(){
+  if(CONNECTED)return true;
+  if(!CONFIGURED){setSync('尚未設定資料庫，請老師先完成設定');return false;}
+  if(typeof firebase==='undefined'){setSync('無法載入連線程式，請檢查網絡後重新整理');return false;}
+  try{
+    if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+    AUTH=firebase.auth();FS=firebase.firestore();
+    await AUTH.signInAnonymously();
+    CONNECTED=true;setSync('已連線');return true;
+  }catch(e){setSync('連線失敗：'+(e.code||e.message||'未知'));return false;}
+}
+function watch(code){
+  unsubs.forEach(f=>{try{f();}catch(e){}});unsubs=[];
+  PLAYERS=[];ROOM={ended:false};
+  if(!FS||!code)return;
+  unsubs.push(roomRef(code).onSnapshot(s=>{
+    ROOM=(s.exists&&s.data())||{ended:false};
+    if(TEACHER)renderTeacher();
+    else if(VIEW==='reg')reg();
+  },err=>setSync('同步出錯：'+(err.code||'未知'))));
+  unsubs.push(playersCol(code).onSnapshot(snap=>{
+    PLAYERS=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(TEACHER)renderTeacher();
+  },err=>setSync('同步出錯：'+(err.code||'未知'))));
+}
+
+const playerBody=()=>({name:ME.name,avatar:ME.avatar,band:ME.band,status:ME.done?'done':'playing',stars:ME.stars,n:ME.results.length,results:ME.results,updated:Date.now()});
+let saving=false,dirty=false;
+function persist(){
+  saveMe();
+  if(!FS||!ME)return;
+  dirty=true;
+  if(!saving)flush();
+}
+async function flush(){
+  saving=true;
+  while(dirty&&FS&&ME){
+    dirty=false;
+    const room=ME.room,pid=ME.pid,body=playerBody();
+    try{await playersCol(room).doc(pid).set(body);setSync('已同步');}
+    catch(e){setSync('未能同步，稍後自動重試');dirty=true;await sleep(3000);}
+  }
+  saving=false;
+}
+
+/* ===== 5a. 小朋友：房間號碼、註冊、開始 ===== */
+function reg(){
+  VIEW='reg';
+  const nm=CH.name.trim();
+  const codeOk=/^\d{6}$/.test(CH.code);
+  const ready=!!(codeOk&&nm&&CH.avatar&&CH.band);
+  app.innerHTML=`<div class="wrap">
+    <div class="hero"><div><h1>論語小測驗</h1><p>顏淵篇 第四至第六章　・　掃 QR 碼或輸入房間號碼即可開始</p></div>
+      <div class="blocks" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+    <div class="panel"><h2>① 房間號碼（6 位數字，掃 QR 碼會自動填入）</h2>
+      <input id="cd" class="field" inputmode="numeric" maxlength="6" value="${esc(CH.code)}" placeholder="例如：123456" autocomplete="off"></div>
+    <div class="panel"><h2>② 你叫什麼名字？（最多 6 字）</h2>
+      <input id="nm" class="field" maxlength="6" value="${esc(CH.name)}" placeholder="例如：小明" autocomplete="off"></div>
+    <div class="panel"><h2>③ 選一個頭像</h2><div class="avatars">${AV.map(a=>`<button class="av ${CH.avatar===a?'on':''}" data-act="av" data-v="${a}" ${nm?'':'disabled'} aria-pressed="${CH.avatar===a}">${a}</button>`).join('')}</div></div>
+    <div class="panel"><h2>④ 你幾歲？</h2><div class="row">
+      <button class="band ${CH.band==='young'?'on':''}" data-act="band" data-v="young" ${CH.avatar?'':'disabled'} aria-pressed="${CH.band==='young'}"><b>3–4 歲</b><span>讀一讀、找一找、描一描</span></button>
+      <button class="band ${CH.band==='older'?'on':''}" data-act="band" data-v="older" ${CH.avatar?'':'disabled'} aria-pressed="${CH.band==='older'}"><b>5–7 歲</b><span>背一背、寫一寫、接句子</span></button></div></div>
+    <div class="cta"><button class="btn primary" data-act="go" id="go" ${ready?'':'disabled'}>開始測驗</button></div>
+    <p class="note">測驗共 15 題。答錯會直接看到正確答案，不扣分，可以隨時開始。</p>
+    <div class="row" style="justify-content:center;margin-top:10px">
+      <button class="linkbtn" data-act="learn">先學一學</button>
+      <button class="linkbtn" data-act="setting" data-k="py">拼音：${SET.py?'開':'關'}</button>
+      <button class="linkbtn" data-act="setting" data-k="auto">自動朗讀：${SET.auto?'開':'關'}</button>
+      <button class="linkbtn" data-act="setting" data-k="snd">音效：${SET.snd?'開':'關'}</button></div>
+    <p class="note" style="text-align:center"><button class="linkbtn" data-act="teacher">老師入口</button></p>
+    <div class="sync2">${SYNCTXT()}</div></div>`;
+}
+function syncReg(){
+  const nm=CH.name.trim();
+  document.querySelectorAll('[data-act="av"]').forEach(b=>b.disabled=!nm);
+  document.querySelectorAll('[data-act="band"]').forEach(b=>b.disabled=!CH.avatar);
+  const go=document.getElementById('go');
+  if(go)go.disabled=!(/^\d{6}$/.test(CH.code)&&nm&&CH.avatar&&CH.band);
+}
+async function startQuiz(){
+  const code=CH.code;
+  if(!(await connect()))return;
+  const r=await roomRef(code).get();
+  if(!r.exists){setSync('找不到房間號碼 '+code+'，請再確認');return;}
+  if((r.data()||{}).ended){setSync('這個房間已經結束，請問老師');return;}
+  ME={room:code,pid:rid(),name:CH.name.trim().slice(0,6),avatar:CH.avatar,band:CH.band,qs:makeQuiz(CH.band),results:[],stars:0,done:false,started:Date.now()};
+  watch(code);saveMe();persist();question();
+}
+function renderChild(){
+  if(ME&&!ME.done&&ME.results.length>=15){ME.done=true;ME.finished=Date.now();persist();}
+  if(ME&&ME.done)return scorecard();
+  if(ME)return question();
+  return reg();
+}
+
+/* ===== 5b. 老師：房間、總界面 ===== */
+async function newRoom(){
+  if(!(await connect()))return;
+  const code=newCode();
+  await roomRef(code).set({ended:false,created:Date.now()});
+  TROOM=code;try{localStorage.setItem('lunyu-cls-troom',code);}catch(e){}
+  T.sel=null;T.arm=null;
+  watch(code);renderTeacher();
+}
+async function initTeacher(){
+  renderTeacher();
+  if(!(await connect()))return;
+  if(/^\d{6}$/.test(TROOM)){
+    const r=await roomRef(TROOM).get();
+    if(r.exists){watch(TROOM);renderTeacher();return;}
+  }
+  await newRoom();
+}
+function joinURL(){return location.href.split('#')[0].split('?')[0]+'?r='+TROOM;}
 /* ===== 7. 事件 ===== */
 app.addEventListener('click',async e=>{
   const el=e.target.closest('[data-act]');if(!el)return;
