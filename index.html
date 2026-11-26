@@ -372,9 +372,14 @@ try{Object.assign(SET,JSON.parse(localStorage.getItem('lunyu-v2-set')||'{}'));}c
 const saveSet=()=>{try{localStorage.setItem('lunyu-v2-set',JSON.stringify(SET));}catch(e){}};
 
 let voice=null;
-function pickVoice(){if(!('speechSynthesis' in window))return;const v=speechSynthesis.getVoices();voice=v.find(x=>/zh[-_]TW/i.test(x.lang))||v.find(x=>/zh[-_]HK/i.test(x.lang))||v.find(x=>/zh/i.test(x.lang))||null;}
+function pickVoice(){
+  // 只用國語（普通話）語音：粵語（zh-HK）會用粵語發音來唸國語字，所以不使用
+  if(!('speechSynthesis' in window))return;
+  const v=speechSynthesis.getVoices().filter(x=>/^zh/i.test(x.lang)&&!/HK|yue|cantonese|粵/i.test(x.lang+' '+x.name));
+  voice=v.find(x=>/zh[-_]TW/i.test(x.lang))||v.find(x=>/zh[-_]CN/i.test(x.lang))||v.find(x=>/^zh$/i.test(x.lang))||null;
+}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
-function speak(t){if(!t||!('speechSynthesis' in window))return;t=t.replace(/亡/g,'無').replace(/省/g,'醒');try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'zh-TW';if(voice)u.voice=voice;u.rate=.7;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
+function speak(t){if(!t||!('speechSynthesis' in window))return;t=t.replace(/亡/g,'無').replace(/省/g,'醒').replace(/愬/g,'訴');try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:'zh-TW';if(voice)u.voice=voice;u.rate=.7;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
 let AC;
 function tone(freqs,dur=.12,type='sine',vol=.16){if(!SET.snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime;freqs.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(vol,t+i*dur);g.gain.exponentialRampToValueAtTime(.001,t+i*dur+dur*1.8);o.connect(g);g.connect(AC.destination);o.start(t+i*dur);o.stop(t+i*dur+dur*2);});}catch(e){}}
 const yay=()=>tone([523,659,784,1047]),oops=()=>tone([247,208],.16,'triangle',.18);
